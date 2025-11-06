@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Vũ Uyên Nhi</title>
+    <link rel="Shortcut Icon" href="dau.png" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: "Helvetica Neue", "Segoe UI", sans-serif;
+            color: #fff;
+            text-align: center;
+            background-color: #e76074; /* 🌸 nền hồng chính */
+            position: relative;
+        }
+
+        /* 🌈 Slideshow nền mờ */
+        .slideshow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .slideshow img {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: translate(-50%, -50%); /* ✅ luôn căn giữa */
+            opacity: 0;
+            filter: blur(8px);
+            transition: opacity 1.5s ease-in-out;
+        }
+
+        .slideshow img.active {
+            opacity: 0.25; /* mờ nhẹ để giữ màu hồng */
+        }
+
+        /* Nội dung chính */
+        .container {
+            position: relative;
+            z-index: 2;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        /* Hiệu ứng chữ gõ */
+        .typewriter {
+            font-size: 60px;
+            font-style: italic;
+            font-weight: 500;
+            white-space: pre-wrap;
+            color: rgb(24, 22, 22);
+            text-shadow: 0 0 15px rgba(255,255,255,0.7);
+            /* đảm bảo chuyển opacity mượt */
+            transition: opacity 0.4s ease;
+            opacity: 1;
+        }
+
+        /* Logo */
+        #logo {
+            width: 130px;
+            border-radius: 200px;
+            box-shadow: 0 0 40px rgba(255, 255, 255, 0.7);
+            border: 3px solid #fff;
+            margin-top: 30px;
+            transition: all 1s ease;
+            cursor: pointer;
+        }
+
+        #logo.rotate {
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .hint {
+            font-size: 18px;
+            color: #fff;
+            margin-top: 10px;
+            text-shadow: 0 0 10px #fff;
+        }
+
+        /* Dòng thời gian */
+        .text {
+            position: fixed;
+            bottom: 30px;
+            width: 100%;
+            text-align: center;
+            font-weight: bold;
+            z-index: 2;
+            color: #fff;
+            font-size: 20px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .typewriter {
+                font-size: 38px;
+            }
+            #logo {
+                width: 90px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- 🌸 Nền slideshow -->
+    <div class="slideshow">
+        <img src="dau1.jfif" class="active">
+        <img src="dau2.png">
+        <img src="dau3.jfif">
+        <img src="dau4.jfif">
+        <img src="dau5.jfif">
+    </div>
+
+    <!-- 💖 Nội dung -->
+    <div class="container">
+        <div class="typewriter" id="typewriter"></div>
+        <img id="logo" src="dau.png" alt="Logo">
+        <div class="hint">👉 Ấn vào đây để bật nhạc 💕</div>
+    </div>
+
+    <div class="text">
+        <span id="span_dt_dt"></span>
+    </div>
+
+    <!-- 🎵 Nhạc YouTube ẩn -->
+    <iframe
+        id="ytplayer"
+        width="0" height="0"
+        src="https://www.youtube.com/embed/Eut2033NsSY?enablejsapi=1&autoplay=0&loop=1&playlist=Eut2033NsSY&mute=1"
+        frameborder="0"
+        allow="autoplay"
+        allowfullscreen
+        style="display:none;">
+    </iframe>
+
+   <script>
+    // 💫 Slideshow nền
+    const slides = document.querySelectorAll('.slideshow img');
+    let current = 0;
+
+    function changeSlide() {
+        slides[current].classList.remove('active');
+        current = (current + 1) % slides.length;
+        slides[current].classList.add('active');
+    }
+    setInterval(changeSlide, 4000);
+
+    // 🖋️ Hiệu ứng đánh máy (mượt + dừng khi hết)
+    const messages = [
+        "Hello Princess",
+        "Cố gắng xem và đọc hết nha.",
+        "Thật sự là…",
+        "Tao muốn đứng trước mặt để nói hơn nhưng mà hiện tại thì có lẽ hẹn nói chuyện riêng thì không khả thi lắm.",
+        "Tao chuẩn bị đi rồi",
+        "Và trước khi đi…",
+        "Tao không muốn giữ một điều tiếc nuối hay gì gì nữa.",
+        "Có thể là mày sẽ bất ngờ khi đọc khi nghe những lời này", 
+        "Nhưng mà cũng phải tới lúc nói ra thôi",
+        "Mày là nguồn động lực để tao cố gắng và thay đổi rất nhiều",
+        "Và tao đã luôn dành cho mày một tình cảm đặc biệt",
+        "Tao đã cố không để cho mày biết vì sợ",
+        "Mày biết rồi thì tao không còn được thể hiện ra những thứ mà tao đã làm",
+        "Tuy là những điều mà tao thể hiện ra như vậy có thể là chưa đủ để mày cảm nhận được", 
+        "Hoặc là do đã làm bạn bè quá lâu rồi để mày có thể cảm nhận được những điều đó.",
+        "Tao biết, đôi khi nhiều thứ không nên nói ra là điều an toàn nhất.",
+        "Tao không mong hay hy vọng điều gì hoặc nhận lại điều gì", 
+        "Càng không muốn làm mày khó xử.",
+        "Thật sự tao chỉ muốn mày biết là tao có tình cảm với mày",
+        "Và từ đó tới giờ tao đối xử tốt với mày là nó xuất phát từ tình cảm của tao chứ không phải vì điều gì cả.",
+        "Được gần, được nói chuyện, chia sẻ, quan tâm hay là mua cái này cái kia cho mày như vậy",
+        "Thì tao cũng tự cảm thấy vui rồi không mong đợi điều gì hơn nữa cả.",
+        "Nói chung là chỉ muốn nói ra như vậy thôi.",
+        "Chúc cho mày luôn luôn vui vẻ, kiếm thật nhiều tiền, hạnh phúc với những gì mày đang có và nhận được",
+        "Vì mày xứng đáng với những điều đó.",
+        "Xinh đẹp như vậy",
+        "Chăm chỉ như vậy",
+        "Giỏi như vậy",
+        "Thì mọi điều đều xứng đáng.",
+        "Nhi Dâu siu giỏi…",
+        "Lời cuối",
+        "Đọc xong hết rồi thì đi ra ngoài một xíu nha."
+    ];
+
+    let i = 0, j = 0;
+    const speed = 120; // tốc độ gõ từng ký tự (ms)
+    const delayBeforeNext = 2000; // giữ dòng trước khi chuyển (ms)
+    const fadeDuration = 1000; // thời gian mờ đi (ms)
+    const typewriter = document.getElementById("typewriter");
+
+    let typingTimer = null; // để quản lý timeout khi typing đang chạy
+    let isStopped = false; // dùng để dừng khi đến dòng cuối
+
+    function startTypingLine() {
+        // bắt đầu gõ từ j = 0 (được gọi khi đã fade-in xong)
+        const message = messages[i];
+
+        // nếu đã tới cuối danh sách thì dừng
+        if (isStopped) return;
+
+        if (j < message.length) {
+            typewriter.textContent += message[j];
+            j++;
+            typingTimer = setTimeout(startTypingLine, speed);
+        } else {
+            // dòng đã hiện đủ
+            setTimeout(() => {
+                if (i < messages.length - 1) {
+                    // ẩn toàn bộ dòng bằng fade
+                    typewriter.style.transition = `opacity ${fadeDuration/1000}s ease`;
+                    typewriter.style.opacity = 0;
+                    setTimeout(() => {
+                        // chuẩn bị gõ dòng tiếp
+                        i++;
+                        j = 0;
+                        typewriter.textContent = "";
+                        // reset opacity nhanh (không thấy) rồi fade-in trước khi gõ
+                        typewriter.style.transition = "opacity 0.2s ease";
+                        typewriter.style.opacity = 1;
+                        // cho một chút thời gian để DOM áp dụng style, sau đó fade-in ngắn rồi gõ
+                        setTimeout(() => {
+                            // fade-in nhẹ
+                            typewriter.style.transition = "opacity 0.4s ease";
+                            typewriter.style.opacity = 1;
+                            // bắt đầu gõ sau một chút (đảm bảo không bị xóa)
+                            setTimeout(startTypingLine, 150);
+                        }, 50);
+                    }, fadeDuration);
+                } else {
+                    // đã tới dòng cuối => dừng hẳn
+                    isStopped = true;
+                    // có thể để nguyên dòng cuối hiện đầy đủ (không fade)
+                    // hoặc nếu muốn fade out sau 1 khoảng thì uncomment dòng dưới:
+                    // setTimeout(()=>{ typewriter.style.opacity = 0; }, 3000);
+                    console.log("Hoàn tất tất cả dòng.");
+                }
+            }, delayBeforeNext);
+        }
+    }
+
+    function typeEffect() {
+        // Khi bắt đầu dòng mới: fade-in nhẹ rồi mới gõ (tránh bị mất chữ)
+        typewriter.style.opacity = 0;
+        typewriter.textContent = "";
+        // chờ một chút để fade-out hoàn tất
+        setTimeout(() => {
+            // fade-in ngắn
+            typewriter.style.transition = "opacity 0.4s ease";
+            typewriter.style.opacity = 1;
+            // bắt đầu gõ sau khi đã hiển thị
+            setTimeout(startTypingLine, 80);
+        }, 120);
+    }
+
+    window.onload = typeEffect;
+
+    // 🎵 Phát nhạc khi click vào logo
+    const logo = document.getElementById('logo');
+    logo.addEventListener('click', () => {
+        const iframe = document.getElementById('ytplayer');
+        iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+        iframe.contentWindow.postMessage('{"event":"command","func":"unMute","args":""}', '*');
+        logo.classList.add('rotate');
+    });
+</script>
+
+
+</body>
+</html>
