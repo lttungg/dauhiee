@@ -96,7 +96,7 @@
             margin-bottom: 25px;
         }
 
-        /* ===== LOGO NHỎ DƯỚI MESSAGE ===== */
+        /* ===== LOGO ===== */
         #logo {
             width: 95px;
             height: 95px;
@@ -108,7 +108,7 @@
             opacity: 0;
         }
 
-        /* ===== RANDOM FLOATING WORDS ===== */
+        /* ===== FLOATING WORDS ===== */
         .floating-word {
             position: fixed;
             color: #ffdde8;
@@ -172,20 +172,20 @@
     /* ===== SLIDESHOW ===== */
     const slides = document.querySelectorAll('.slideshow img');
     let current = 0;
+
     function changeSlide() {
         slides[current].classList.remove('active');
         current = (current + 1) % slides.length;
         slides[current].classList.add('active');
-    }
-    setInterval(() => {
-    const count = Math.floor(Math.random() * 2) + 3; // 3 hoặc 4 chữ
+           setInterval(() => {
+    const count = Math.floor(Math.random() * 2) + 2; // 3 hoặc 4 chữ
     const randomMessage = messages[Math.floor(Math.random() * messages.length)];
 
     for (let i = 0; i < count; i++) {
         spawnWord(randomMessage); // gửi cùng 1 chữ
     }
 }, 3000);
-
+    }
 
     /* ===== MESSAGES ===== */
     const messages = [
@@ -284,11 +284,15 @@
 
             startBeat();
             showMessage();
-            setInterval(spawnWord, 3000);  // Bắt đầu random chữ
+            setInterval(spawnWord, 3000);
+
+            /* 🎬 SLIDESHOW LẶP MÃI MÃI */
+            setInterval(changeSlide, 4000);
+
         }, 900);
     });
 
-    /* ===== LOGO ĐẬP THEO NHẠC ===== */
+    /* ===== LOGO BEAT ===== */
     let audioCtx, analyser, dataArray;
 
     function startBeat() {
@@ -317,7 +321,7 @@
         logo.style.transform = `scale(${scale})`;
     }
 
-    /* ===== RANDOM WORD SPAWN ===== */
+    /* ===== RANDOM WORDS ===== */
     const randomWords = ["dauhiee", "bedaune", "cosy", "bí nhe", "nhi dâu", "bấu de"];
 
     function spawnWord() {
