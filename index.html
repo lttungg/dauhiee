@@ -5,6 +5,7 @@
     <title>Vũ Uyên Nhi</title>
     <link rel="Shortcut Icon" href="dau.png" type="image/x-icon" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <style>
         html, body {
             height: 100%;
@@ -12,13 +13,37 @@
             padding: 0;
             overflow: hidden;
             font-family: "Helvetica Neue", "Segoe UI", sans-serif;
-            color: #fff;
             text-align: center;
-            background-color: #e76074;
-            position: relative;
+            background-color: #000;
+            transition: background-color 1.5s ease;
         }
 
-        /* 🌈 Slideshow nền */
+        /* ===== BUTTON ===== */
+        #startBtn {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 18px 40px;
+            font-size: 28px;
+            font-weight: bold;
+            background: #ff7fae;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(255, 126, 170, 0.8);
+            z-index: 9999;
+            transition: opacity 1s ease, transform 1s ease;
+        }
+
+        #startBtn.fadeOut {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.85);
+            pointer-events: none;
+        }
+
+        /* ===== SLIDESHOW ===== */
         .slideshow {
             position: fixed;
             top: 0;
@@ -27,6 +52,8 @@
             height: 100%;
             z-index: 0;
             overflow: hidden;
+            opacity: 0;
+            transition: opacity 1.5s ease;
         }
 
         .slideshow img {
@@ -46,69 +73,83 @@
             opacity: 0.25;
         }
 
-        /* Nội dung */
+        /* ===== CONTAINER ===== */
         .container {
             position: relative;
             z-index: 2;
-            top: 50%;
+            top: 42%;
             transform: translateY(-50%);
+            color: #fff;
+            opacity: 0;
+            transition: opacity 1.5s ease;
         }
 
-        /* Chữ */
         .typewriter {
-            font-size: 60px;
+            font-size: 70px;
             font-style: italic;
             font-weight: 500;
             white-space: pre-wrap;
-            color: rgb(24, 22, 22);
-            text-shadow: 0 0 15px rgba(255,255,255,0.7);
-            transition: opacity 0.4s ease;
-            opacity: 1;
+            text-shadow: 0 0 15px rgba(255,255,255,0.5);
+            transition: opacity 0.4s ease, color 1s ease;
+            opacity: 0;
+            color: #ff7fae;
+            margin-bottom: 25px;
         }
 
+        /* ===== LOGO NHỎ DƯỚI MESSAGE ===== */
         #logo {
-            width: 130px;
+            width: 95px;
+            height: 95px;
             border-radius: 200px;
-            box-shadow: 0 0 40px rgba(255, 255, 255, 0.7);
-            border: 3px solid #fff;
-            margin-top: 30px;
-            transition: all 1s ease;
-            cursor: pointer;
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.7);
+            border: 2px solid #fff;
+            margin-top: 100px;
+            transition: transform 0.1s linear;
+            opacity: 0;
         }
 
-        #logo.rotate {
-            animation: spin 2s linear infinite;
-        }
-
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .hint {
-            font-size: 18px;
-            color: #fff;
-            margin-top: 10px;
-            text-shadow: 0 0 10px #fff;
-        }
-
-        .text {
+        /* ===== RANDOM FLOATING WORDS ===== */
+        .floating-word {
             position: fixed;
-            bottom: 30px;
-            width: 100%;
-            text-align: center;
+            color: #ffdde8;
+            font-size: 28px;
             font-weight: bold;
-            z-index: 2;
-            color: #fff;
-            font-size: 20px;
+            opacity: 0;
+            pointer-events: none;
+            animation: floatUp 3s ease-out forwards;
+            text-shadow: 0 0 10px rgba(255,255,255,0.8);
+            z-index: 999;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(30px) rotate(0deg);
+                opacity: 0;
+            }
+            20% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-120px) rotate(25deg);
+                opacity: 0;
+            }
+        }
+
+        /* Mobile */
+        @media (max-width: 600px) {
+            .typewriter { font-size: 32px; }
+            #logo { width: 75px; height: 75px; }
         }
     </style>
 </head>
 
 <body>
 
-    <!-- Slideshow -->
-    <div class="slideshow">
+    <!-- BUTTON -->
+    <button id="startBtn">Vô nè</button>
+
+    <!-- SLIDESHOW -->
+    <div class="slideshow" id="slideshow">
         <img src="dau1.jfif" class="active">
         <img src="dau2.png">
         <img src="dau3.jfif">
@@ -116,30 +157,19 @@
         <img src="dau5.jfif">
     </div>
 
-    <!-- Nội dung -->
     <div class="container">
         <div class="typewriter" id="typewriter"></div>
         <img id="logo" src="dau.png" alt="Logo">
-        <div class="hint">👉 Ấn vào đây để bật nhạc 💕</div>
     </div>
 
-    <div class="text">
-        <span id="span_dt_dt"></span>
-    </div>
-
-    <!-- Nhạc -->
-    <iframe
-        id="ytplayer"
-        width="0" height="0"
-        src="https://www.youtube.com/embed/Eut2033NsSY?enablejsapi=1&autoplay=0&loop=1&playlist=Eut2033NsSY&mute=1"
-        frameborder="0"
-        allow="autoplay"
-        allowfullscreen
-        style="display:none;">
-    </iframe>
+    <!-- AUDIO -->
+    <audio id="audio" src="nhac.mp3" loop></audio>
 
 <script>
-    // Slideshow
+    const audio = document.getElementById("audio");
+    const logo = document.getElementById("logo");
+
+    /* ===== SLIDESHOW ===== */
     const slides = document.querySelectorAll('.slideshow img');
     let current = 0;
     function changeSlide() {
@@ -147,19 +177,28 @@
         current = (current + 1) % slides.length;
         slides[current].classList.add('active');
     }
-    setInterval(changeSlide, 4000);
+    setInterval(() => {
+    const count = Math.floor(Math.random() * 2) + 3; // 3 hoặc 4 chữ
+    const randomMessage = messages[Math.floor(Math.random() * messages.length)];
 
-    // Bộ chữ chạy
+    for (let i = 0; i < count; i++) {
+        spawnWord(randomMessage); // gửi cùng 1 chữ
+    }
+}, 3000);
+
+
+    /* ===== MESSAGES ===== */
     const messages = [
         "Hello Princess 🍓",
         "Cố gắng xem và đọc hết nha.",
+        "...",
         "Thật sự là…",
-        "Tao muốn đứng trước mặt để nói hơn nhưng mà hiện tại thì có lẽ hẹn nói chuyện riêng thì không khả thi lắm.",
         "Tao chuẩn bị đi rồi",
         "Và trước khi đi…",
         "Tao không muốn giữ một điều tiếc nuối gì nữa.",
-        "Có thể là mày sẽ bất ngờ khi đọc khi nghe những lời này", 
-        "Nhưng mà cũng phải tới lúc nói ra thôi",
+        "Có thể là mày sẽ bất ngờ khi đọc khi nghe những lời này",
+        "Nhưng mà cũng phải tới lúc để nói ra thôi",
+        "Tao muốn đứng trước mặt để nói hơn nhưng mà hiện tại thì có lẽ hẹn nói chuyện riêng thì không thể được.",
         "Không bây giờ thì cũng chả còn cơ hội nào để có thể nói nữa",
         "...",
         "Có những người nói muốn làm bạn để từ chối một người",
@@ -170,23 +209,24 @@
         "Đối với tao, mày luôn có một sự ưu tiên",
         "Mày là nguồn động lực để tao cố gắng và thay đổi rất nhiều",
         "Tao cố gắng không để cho mày biết chỉ vì tao sợ rằng",
-        "Mày biết rồi thì tụi mình không còn thân được với nhau nữa", 
+        "Mày biết rồi thì tụi mình không còn thân được với nhau nữa",
         "Tao không còn được thể hiện ra những thứ mà tao muốn làm nữa",
-        "Tuy là những điều mà tao thể hiện ra như vậy có thể là chưa đủ để mày cảm nhận được", 
+        "Tuy là những điều mà tao thể hiện ra như vậy có thể là chưa đủ để mày cảm nhận được",
         "Hoặc là do đã làm bạn bè quá lâu rồi để mày có thể cảm nhận được những điều đó.",
         "Tao biết là mày không muốn có tình cảm giữa bạn bè với nhau",
         "Nên đôi khi nhiều thứ không nên nói ra là điều an toàn nhất.",
         "Trong thời gian qua tao luôn cố tránh mặt mày",
         "Không phải vì tao ghét hay giận gì mày cả",
         "Chỉ là bây giờ tình cảm tao dành cho mày quá nhiều rồi để có thể thấy mày với ai khác",
-        "Tao không mong hay hy vọng điều gì hoặc nhận lại điều gì", 
+        "Tao không mong hay hy vọng điều gì hoặc nhận lại điều gì",
         "Càng không muốn làm mày khó xử.",
         "Tao chỉ muốn mày biết là tao có tình cảm với mày",
         "Và từ đó tới giờ tao đối xử tốt với mày là nó xuất phát từ tình cảm của tao chứ không phải vì điều gì cả.",
         "Được gần, được nói chuyện, chia sẻ, quan tâm, lo lắng hay là mua cho cái này cái kia như vậy",
+        "Dám thể hiện ra những thứ mà trước đây tao không dám thể hiện ra với mày như vậy",
         "Thì tao cũng tự cảm thấy vui rồi không mong đợi điều gì hơn nữa cả.",
         "Nói chung là chỉ muốn nói ra như vậy thôi.",
-        "Chúc cho mày luôn luôn vui vẻ, nhiều sức khỏe, cố gắng kiếm thật nhiều tiền, công việc ổn định, hạnh phúc với những gì mình đang có và nhận được",
+        "Chúc cho mày luôn luôn vui vẻ, cố gắng kiếm thật nhiều tiền, ổn định trong công việc, hạnh phúc với những gì mình đang có và nhận được",
         "Vì mày xứng đáng với những điều đó.",
         "Xinh đẹp như vậy",
         "Chăm chỉ như vậy",
@@ -197,10 +237,12 @@
     ];
 
     const typewriter = document.getElementById("typewriter");
-    const showTime = 4500;
-    const fadeTime = 2000;
+    const container = document.querySelector(".container");
+    const startBtn = document.getElementById("startBtn");
 
     let index = 0;
+    const showTime = 4500;
+    const fadeTime = 2000;
 
     function showMessage() {
         typewriter.style.opacity = 0;
@@ -209,6 +251,12 @@
         setTimeout(() => {
             typewriter.textContent = messages[index];
             typewriter.style.opacity = 1;
+
+            if (index === 3) {
+                document.body.style.backgroundColor = "#f09aa7";
+                document.getElementById("slideshow").style.opacity = 1;
+                typewriter.style.color = "#181616";
+            }
 
             setTimeout(() => {
                 if (index < messages.length - 1) {
@@ -222,19 +270,73 @@
         }, 200);
     }
 
-    window.onload = showMessage;
+    /* ===== BUTTON CLICK ===== */
+    startBtn.addEventListener("click", () => {
+        startBtn.classList.add("fadeOut");
 
-    // 🎵 Nhạc
-    const logo = document.getElementById('logo');
-    logo.addEventListener('click', () => {
-        const iframe = document.getElementById('ytplayer');
-        iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
-        iframe.contentWindow.postMessage('{"event":"command","func":"unMute","args":""}', '*');
-        logo.classList.add('rotate');
+        setTimeout(() => {
+            startBtn.style.display = "none";
+
+            audio.play();
+
+            container.style.opacity = 1;
+            logo.style.opacity = 1;
+
+            startBeat();
+            showMessage();
+            setInterval(spawnWord, 3000);  // Bắt đầu random chữ
+        }, 900);
     });
 
-</script>
+    /* ===== LOGO ĐẬP THEO NHẠC ===== */
+    let audioCtx, analyser, dataArray;
 
+    function startBeat() {
+        audioCtx = new AudioContext();
+        const source = audioCtx.createMediaElementSource(audio);
+
+        analyser = audioCtx.createAnalyser();
+        analyser.fftSize = 256;
+
+        dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+        source.connect(analyser);
+        analyser.connect(audioCtx.destination);
+
+        beatLoop();
+    }
+
+    function beatLoop() {
+        requestAnimationFrame(beatLoop);
+
+        analyser.getByteFrequencyData(dataArray);
+        let bass = dataArray[2];
+
+        let scale = 1 + bass / 180;
+
+        logo.style.transform = `scale(${scale})`;
+    }
+
+    /* ===== RANDOM WORD SPAWN ===== */
+    const randomWords = ["dauhiee", "bedaune", "cosy", "bí nhe", "nhi dâu", "bấu de"];
+
+    function spawnWord() {
+        const word = document.createElement("div");
+        word.className = "floating-word";
+        word.textContent = randomWords[Math.floor(Math.random() * randomWords.length)];
+
+        const x = Math.random() * window.innerWidth;
+        const y = Math.random() * window.innerHeight;
+        const tilt = (Math.random() * 60) - 30;
+
+        word.style.left = `${x}px`;
+        word.style.top = `${y}px`;
+        word.style.transform = `rotate(${tilt}deg)`;
+
+        document.body.appendChild(word);
+
+        setTimeout(() => word.remove(), 3000);
+    }
+</script>
 </body>
 </html>
-
