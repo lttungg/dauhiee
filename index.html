@@ -105,16 +105,17 @@
         }
 
         .floating-word {
-            position: fixed;
-            color: #ffdde8;
-            font-size: 28px;
-            font-weight: bold;
-            opacity: 0;
-            pointer-events: none;
-            animation: floatUp 3s ease-out forwards;
-            text-shadow: 0 0 10px rgba(255,255,255,0.8);
-            z-index: 999;
-        }
+    position: fixed;
+    color: #ffdde8;
+    font-size: 28px;
+    font-weight: bold;
+    opacity: 0;
+    pointer-events: none;
+    animation: floatUp 3s ease-out forwards;
+    text-shadow: 0 0 10px rgba(255,255,255,0.8);
+    z-index: 1; /* ⭐ THAY 999 thành 1 */
+}
+
 
         @keyframes floatUp {
             0% {
