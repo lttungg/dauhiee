@@ -106,7 +106,7 @@
 
         .floating-word {
     position: fixed;
-    color: #ffdde8;
+    color: #fce2ea;
     font-size: 28px;
     font-weight: bold;
     opacity: 0;
@@ -220,11 +220,11 @@
         "Nên đôi khi nhiều thứ không nên nói ra là điều an toàn nhất.",
         "Trong thời gian qua tao luôn cố tránh mặt mày",
         "Không phải vì tao ghét hay giận gì mày cả",
-        "Chỉ là bây giờ tình cảm tao dành cho mày quá nhiều rồi để có thể thấy mày với ai khác",
+        "Chỉ là bây giờ cáo tình cảm đấy nó quá nhiều rồi để có thể thấy mày với ai khác",
         "Tao không mong hay hy vọng điều gì hoặc nhận lại điều gì",
         "Càng không muốn làm mày khó xử.",
         "Tao chỉ muốn mày biết là tao có tình cảm với mày",
-        "Và từ đó tới giờ tao đối xử tốt với mày là nó xuất phát từ tình cảm của tao chứ không phải vì điều gì cả.",
+        "Và từ đó tới giờ tao đối xử tốt với mày là xuất phát từ tình cảm của tao chứ không phải vì điều gì cả.",
         "Được gần, được nói chuyện, chia sẻ, quan tâm, lo lắng hay là mua cho cái này cái kia như vậy",
         "Dám thể hiện ra những thứ mà trước đây tao không dám thể hiện ra với mày như vậy",
         "Thì tao cũng tự cảm thấy vui rồi không mong đợi điều gì hơn nữa cả.",
@@ -253,8 +253,9 @@
         typewriter.textContent = "";
 
         setTimeout(() => {
-            typewriter.textContent = messages[index];
-            typewriter.style.opacity = 1;
+    typewriter.innerHTML = `<b>${messages[index]}</b>`;
+    typewriter.style.opacity = 1;
+
 
             if (index === 3) {
                 document.body.style.backgroundColor = "#f09aa7";
