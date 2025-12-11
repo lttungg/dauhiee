@@ -18,7 +18,6 @@
             transition: background-color 1.5s ease;
         }
 
-        /* ===== BUTTON ===== */
         #startBtn {
             position: fixed;
             top: 50%;
@@ -43,7 +42,6 @@
             pointer-events: none;
         }
 
-        /* ===== SLIDESHOW ===== */
         .slideshow {
             position: fixed;
             top: 0;
@@ -73,7 +71,6 @@
             opacity: 0.25;
         }
 
-        /* ===== CONTAINER ===== */
         .container {
             position: relative;
             z-index: 2;
@@ -96,7 +93,6 @@
             margin-bottom: 25px;
         }
 
-        /* ===== LOGO ===== */
         #logo {
             width: 95px;
             height: 95px;
@@ -108,7 +104,6 @@
             opacity: 0;
         }
 
-        /* ===== FLOATING WORDS ===== */
         .floating-word {
             position: fixed;
             color: #ffdde8;
@@ -135,7 +130,6 @@
             }
         }
 
-        /* Mobile */
         @media (max-width: 600px) {
             .typewriter { font-size: 32px; }
             #logo { width: 75px; height: 75px; }
@@ -145,31 +139,48 @@
 
 <body>
 
-    <!-- BUTTON -->
-    <button id="startBtn">Vô nè</button>
+<button id="startBtn">Vô nè</button>
 
-    <!-- SLIDESHOW -->
-    <div class="slideshow" id="slideshow">
-        <img src="dau1.jfif" class="active">
-        <img src="dau2.png">
-        <img src="dau3.jfif">
-        <img src="dau4.jfif">
-        <img src="dau5.jfif">
-    </div>
+<div class="slideshow" id="slideshow">
+    <img src="dau1.jfif" class="active">
+    <img src="dau2.png">
+    <img src="dau3.jfif">
+    <img src="dau4.jfif">
+    <img src="dau5.jfif">
+</div>
 
-    <div class="container">
-        <div class="typewriter" id="typewriter"></div>
-        <img id="logo" src="dau.png" alt="Logo">
-    </div>
+<div class="container">
+    <div class="typewriter" id="typewriter"></div>
+    <img id="logo" src="dau.png" alt="Logo">
+</div>
 
-    <!-- AUDIO -->
-    <audio id="audio" src="nhac.mp3" loop></audio>
+<!-- AUDIO -->
+<audio id="audio"></audio>
 
 <script>
-    const audio = document.getElementById("audio");
-    const logo = document.getElementById("logo");
 
-    /* ===== SLIDESHOW ===== */
+    /* ===== PLAYLIST AUDIO ===== */
+    const audio = document.getElementById("audio");
+
+    const playlist = ["nhac.mp3", "nhac2.mp3"];
+    let currentTrack = 0;
+
+    function playTrack(index) {
+        audio.src = playlist[index];
+        audio.play();
+    }
+
+    audio.addEventListener("ended", () => {
+        currentTrack++;
+
+        if (currentTrack >= playlist.length) {
+            currentTrack = 0; // quay lại bài đầu
+        }
+
+        playTrack(currentTrack);
+    });
+
+    const logo = document.getElementById("logo");
     const slides = document.querySelectorAll('.slideshow img');
     let current = 0;
 
@@ -177,17 +188,8 @@
         slides[current].classList.remove('active');
         current = (current + 1) % slides.length;
         slides[current].classList.add('active');
-           setInterval(() => {
-    const count = Math.floor(Math.random() * 2) + 2; // 3 hoặc 4 chữ
-    const randomMessage = messages[Math.floor(Math.random() * messages.length)];
-
-    for (let i = 0; i < count; i++) {
-        spawnWord(randomMessage); // gửi cùng 1 chữ
-    }
-}, 3000);
     }
 
-    /* ===== MESSAGES ===== */
     const messages = [
         "Hello Princess 🍓",
         "Cố gắng xem và đọc hết nha.",
@@ -244,6 +246,7 @@
     const showTime = 4500;
     const fadeTime = 2000;
 
+
     function showMessage() {
         typewriter.style.opacity = 0;
         typewriter.textContent = "";
@@ -270,29 +273,26 @@
         }, 200);
     }
 
-    /* ===== BUTTON CLICK ===== */
     startBtn.addEventListener("click", () => {
         startBtn.classList.add("fadeOut");
 
         setTimeout(() => {
             startBtn.style.display = "none";
 
-            audio.play();
+            playTrack(0); // chạy bài đầu playlist
 
             container.style.opacity = 1;
             logo.style.opacity = 1;
 
             startBeat();
             showMessage();
-            setInterval(spawnWord, 3000);
 
-            /* 🎬 SLIDESHOW LẶP MÃI MÃI */
             setInterval(changeSlide, 4000);
+            setInterval(spawnWord, 3000);
 
         }, 900);
     });
 
-    /* ===== LOGO BEAT ===== */
     let audioCtx, analyser, dataArray;
 
     function startBeat() {
@@ -321,26 +321,40 @@
         logo.style.transform = `scale(${scale})`;
     }
 
-    /* ===== RANDOM WORDS ===== */
-    const randomWords = ["dauhiee", "bedaune", "cosy", "bí nhe", "nhi dâu", "bấu de"];
+   const randomWords = ["dauhiee", "bedaune", "cosy", "bí nhe", "nhi dâu", "bấu de"];
 
-    function spawnWord() {
-        const word = document.createElement("div");
-        word.className = "floating-word";
-        word.textContent = randomWords[Math.floor(Math.random() * randomWords.length)];
+/* ===== RANDOM WORDS NHÓM 4-5 CHỮ ===== */
+function spawnWordGroup() {
+    const pickedWord = randomWords[Math.floor(Math.random() * randomWords.length)];
+    const count = Math.floor(Math.random() * 2) + 10; // 4 hoặc 5 chữ
 
-        const x = Math.random() * window.innerWidth;
-        const y = Math.random() * window.innerHeight;
-        const tilt = (Math.random() * 60) - 30;
-
-        word.style.left = `${x}px`;
-        word.style.top = `${y}px`;
-        word.style.transform = `rotate(${tilt}deg)`;
-
-        document.body.appendChild(word);
-
-        setTimeout(() => word.remove(), 3000);
+    for (let i = 0; i < count; i++) {
+        spawnWord(pickedWord);
     }
+}
+
+function spawnWord(text) {
+    const word = document.createElement("div");
+    word.className = "floating-word";
+    word.textContent = text;
+
+    const x = Math.random() * window.innerWidth;
+    const y = Math.random() * window.innerHeight;
+    const tilt = (Math.random() * 60) - 30;
+
+    word.style.left = `${x}px`;
+    word.style.top = `${y}px`;
+    word.style.transform = `rotate(${tilt}deg)`;
+
+    document.body.appendChild(word);
+
+    setTimeout(() => word.remove(), 3000);
+}
+
+/* ===== GỌI MỖI 3 GIÂY ===== */
+setInterval(spawnWordGroup, 3000);
+
+
 </script>
 </body>
 </html>
